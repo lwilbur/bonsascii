@@ -1,0 +1,6 @@
+considering (x, y) loc (10, 89), which has value '-1'
+considering (x, y) loc (10, 90), which has value '-1'
+considering (x, y) loc (11, 89), which has value '-1'
+considering (x, y) loc (90, 12), which has value '35'
+considering (x, y) loc (91, 11), which has value '32'
+considering (x, y) loc (91, 12), which has value '32'

@@ -5,12 +5,13 @@
 #include <stdlib.h>
 #include <ncurses.h>
 
-enum type {trunk, leaf};
+enum type {TRUNK, LEAF};
 
 int main(int argc, char* argv[]);
 void ncurses_init();
-void main_loop();
-void leave(int code);
+void generate_tree();
 void grow(int x, int y, enum type t);
+void interact_loop();
+void leave(int code);
 
 #endif 
