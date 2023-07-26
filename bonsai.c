@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <time.h>
 #include <assert.h>
 #include <ncurses.h>
 
@@ -12,12 +13,16 @@ const int TRUNK_COLOR = 1;
 const int LEAF_COLOR  = 2;
 int maxY, maxX;
 
-FILE* file;
+FILE* logFile;
 
 /**
  * Create window, grow tree, allow user interaction, and exit
  */
 int main(int argc, char* argv[]) {
+    logFile = fopen("./log.txt", "w");
+    srand(time(NULL));
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(logFile, NULL, _IONBF, 0);
     ncurses_init();
     generate_tree();
     interact_loop();
@@ -52,6 +57,8 @@ void generate_tree() {
     int currY = maxY/2;
     int currX = maxX/2;
     
+    fprintf(logFile, "starting tree at (y, x) = (%d, %d)\n", currY, currX);
+    
     // Begin recursive, randomized growth pattern
     grow(currY, currX, TRUNK);
     refresh();
@@ -59,10 +66,7 @@ void generate_tree() {
 
 
 
-void grow(int x, int y, enum type t) {
-
-    file = fopen("./log.txt", "w");
-
+void grow(int y, int x, enum type t) {
     sleep(1);
     refresh(); 
 
@@ -77,8 +81,8 @@ void grow(int x, int y, enum type t) {
     
     // Draw at curr location, if not currently occupied
     int currCh = mvinch(y, x) & A_CHARTEXT;
-    if (currCh == -1)
-        mvwaddch(stdscr, x, y, ch);
+    if (currCh == ' ')
+        mvwaddch(stdscr, y, x, ch);
 
     // Consider adjacent squares, decide growth randomly
     bool isGrowing = false;
@@ -88,23 +92,27 @@ void grow(int x, int y, enum type t) {
             int adjX = x + x_offset;
             char adjCh = mvinch(adjY, adjX) & A_CHARTEXT;
 
-            fprintf(file, "considering (x, y) loc (%d, %d), which has value '%d'\n", adjX, adjY, adjCh);
+            fprintf(logFile, "considering (y, x) loc (%d, %d), which has value '%d'\n", adjY, adjX, adjCh);
 
             // Don't overwrite existing squares
-            if (adjCh != -1)
+            if (adjCh != ' ') {
+                fprintf(logFile, "\toccupied -- continuing\n");
                 continue;
+            }
 
-            // 50/50 chance to grow into adj squares
+            // 25% chance to grow into adj squares
+            fprintf(logFile, "\tvalid, growing\n");
             int percent_roll = rand() % 100;
-            if (percent_roll > 50) {
+            fprintf(logFile, "\tpercent roll = %d\n", percent_roll);
+            if (percent_roll > 75) {
                 isGrowing = true;
-                mvwaddch(stdscr, x + x_offset, y + y_offset, ch);
+                mvwaddch(stdscr, adjY, adjX, ch); // TODO: figure out why this doesn't work, but wrong order (x, y) does
                 grow(adjY, adjX, t);
             }
         }
     }
 
-    fclose(file);
+    fclose(logFile);
 
     // TODO: handle wrapping off edge of screen
     
@@ -112,7 +120,7 @@ void grow(int x, int y, enum type t) {
     if (!isGrowing) {
         // Change to leaves if currently trunk and try again
         if (t == TRUNK)
-            grow(x, y, LEAF);
+            grow(y, x, LEAF);
         
         // If currently leaf, this branch of recursion ends
     }
@@ -177,5 +185,6 @@ void interact_loop() {
  */
 void leave(int code) {
     endwin();
+    fclose(logFile);
     exit(code);
 }
