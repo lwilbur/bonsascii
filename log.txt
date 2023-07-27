@@ -1,33 +1,63 @@
-starting tree at (y, x) = (11, 90)
-considering (y, x) loc (10, 89), which has value '32'
+starting tree at (y, x) = (63, 49)
+considering (y, x) loc (62, 48), which has value '32'
 	valid, growing
-	percent roll = 38
-considering (y, x) loc (11, 89), which has value '32'
+	percent roll = 83
+considering (y, x) loc (61, 47), which has value '32'
 	valid, growing
-	percent roll = 88
-considering (y, x) loc (10, 88), which has value '32'
+	percent roll = 28
+considering (y, x) loc (60, 46), which has value '32'
+	valid, growing
+	percent roll = 39
+considering (y, x) loc (59, 45), which has value '32'
+	valid, growing
+	percent roll = 73
+considering (y, x) loc (58, 44), which has value '32'
+	valid, growing
+	percent roll = 80
+considering (y, x) loc (57, 43), which has value '32'
+	valid, growing
+	percent roll = 99
+considering (y, x) loc (56, 42), which has value '32'
+	valid, growing
+	percent roll = 69
+considering (y, x) loc (55, 41), which has value '32'
+	valid, growing
+	percent roll = 78
+considering (y, x) loc (54, 40), which has value '32'
+	valid, growing
+	percent roll = 96
+considering (y, x) loc (53, 39), which has value '32'
+	valid, growing
+	percent roll = 40
+considering (y, x) loc (54, 39), which has value '32'
+	valid, growing
+	percent roll = 64
+considering (y, x) loc (53, 38), which has value '32'
+	valid, growing
+	percent roll = 93
+considering (y, x) loc (52, 37), which has value '32'
+	valid, growing
+	percent roll = 80
+considering (y, x) loc (51, 36), which has value '32'
+	valid, growing
+	percent roll = 90
+considering (y, x) loc (50, 35), which has value '32'
+	valid, growing
+	percent roll = 74
+considering (y, x) loc (49, 34), which has value '32'
+	valid, growing
+	percent roll = 33
+considering (y, x) loc (50, 34), which has value '32'
+	valid, growing
+	percent roll = 55
+considering (y, x) loc (49, 35), which has value '32'
+	valid, growing
+	percent roll = 49
+considering (y, x) loc (50, 35), which has value '35'
+	occupied -- continuing
+considering (y, x) loc (49, 36), which has value '32'
 	valid, growing
 	percent roll = 23
-considering (y, x) loc (11, 88), which has value '32'
+considering (y, x) loc (50, 36), which has value '32'
 	valid, growing
-	percent roll = 34
-considering (y, x) loc (10, 89), which has value '32'
-	valid, growing
-	percent roll = 88
-considering (y, x) loc (9, 88), which has value '32'
-	valid, growing
-	percent roll = 66
-considering (y, x) loc (10, 88), which has value '32'
-	valid, growing
-	percent roll = 8
-considering (y, x) loc (9, 89), which has value '32'
-	valid, growing
-	percent roll = 32
-considering (y, x) loc (10, 89), which has value '35'
-	occupied -- continuing
-considering (y, x) loc (9, 90), which has value '32'
-	valid, growing
-	percent roll = 26
-considering (y, x) loc (10, 90), which has value '32'
-	valid, growing
-	percent roll = 51
+	percent roll = 45

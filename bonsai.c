@@ -41,8 +41,9 @@ void ncurses_init() {
     keypad(stdscr, TRUE);  // allow arrow keys, del, etc.
 
     // Colors
-    init_pair(1, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);
+    start_color();
+    init_pair(1, COLOR_YELLOW, COLOR_YELLOW);
+    init_pair(2, COLOR_GREEN, COLOR_GREEN);
 }
 
 
@@ -54,35 +55,26 @@ void generate_tree() {
     getmaxyx(stdscr, maxY, maxX);
 
     // Start tree in center bottom
-    int currY = maxY/2;
+    int currY = maxY - 1;
     int currX = maxX/2;
     
     fprintf(logFile, "starting tree at (y, x) = (%d, %d)\n", currY, currX);
     
     // Begin recursive, randomized growth pattern
-    grow(currY, currX, TRUNK);
+    grow(currY, currX, 0, TRUNK);
     refresh();
 }
 
 
 
-void grow(int y, int x, enum type t) {
-    sleep(1);
+void grow(int y, int x, int dist, enum type t) {
+    msleep(25);
     refresh(); 
-
-    // Determine character
-    char ch;
-    if (t == TRUNK)
-        ch = TRUNK_CHAR;
-    else if (t == LEAF)
-        ch = LEAF_CHAR;
-    else
-        exit(1);
     
     // Draw at curr location, if not currently occupied
     int currCh = mvinch(y, x) & A_CHARTEXT;
     if (currCh == ' ')
-        mvwaddch(stdscr, y, x, ch);
+        draw_char(y, x, t);
 
     // Consider adjacent squares, decide growth randomly
     bool isGrowing = false;
@@ -100,14 +92,14 @@ void grow(int y, int x, enum type t) {
                 continue;
             }
 
-            // 25% chance to grow into adj squares
+            // (100-5*dist)% chance to grow into adj squares
             fprintf(logFile, "\tvalid, growing\n");
             int percent_roll = rand() % 100;
             fprintf(logFile, "\tpercent roll = %d\n", percent_roll);
-            if (percent_roll > 75) {
+            if (percent_roll > 5*dist) {
                 isGrowing = true;
-                mvwaddch(stdscr, adjY, adjX, ch); // TODO: figure out why this doesn't work, but wrong order (x, y) does
-                grow(adjY, adjX, t);
+                draw_char(adjY, adjX, t);
+                grow(adjY, adjX, dist + 1, t);
             }
         }
     }
@@ -120,12 +112,35 @@ void grow(int y, int x, enum type t) {
     if (!isGrowing) {
         // Change to leaves if currently trunk and try again
         if (t == TRUNK)
-            grow(y, x, LEAF);
+            grow(y, x, dist, LEAF);
         
         // If currently leaf, this branch of recursion ends
     }
 
     refresh();
+}
+
+
+void draw_char(int y, int x, enum type t) {
+    // Determine character
+    char ch;
+    int colorIdx;
+    if (t == TRUNK) {
+        ch = TRUNK_CHAR;
+        colorIdx = TRUNK_COLOR;
+    }
+    else if (t == LEAF) {
+        ch = LEAF_CHAR;
+        colorIdx = LEAF_CHAR;
+    }
+    else
+        exit(1);
+    
+    attron(COLOR_PAIR(colorIdx));
+    attron(A_BOLD);
+    mvwaddch(stdscr, y, x, ch);
+    attroff(A_BOLD);
+    attroff(COLOR_PAIR(colorIdx));
 }
 
 
@@ -177,6 +192,14 @@ void interact_loop() {
         // Update screen
         refresh();
     }
+}
+
+
+/**
+ * Sleep for a certain number of miliseconds
+*/
+void msleep(int miliseconds) {
+    usleep(1000 * miliseconds);
 }
 
 
